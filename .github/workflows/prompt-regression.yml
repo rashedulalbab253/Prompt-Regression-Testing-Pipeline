@@ -1,0 +1,44 @@
+name: Prompt Regression Testing Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  prompt-eval:
+    name: Run Prompt Regression Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/checkout@v4
+      with:
+        python-version: '3.10'
+
+    - name: Cache Pip Dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Prompt Regression Suite
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        # Trigger full evaluation (all 50+ golden cases) in CI/CD context
+        RUN_ALL_TESTS: "true"
+        # Configure thresholds
+        CORRECTNESS_THRESHOLD: 0.7
+      run: |
+        python run_pipeline.py --all --verbose

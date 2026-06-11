@@ -1,0 +1,32 @@
+[
+  {
+    "input": "def is_even(num):\n    return num % 2 == 0",
+    "score": 0.95,
+    "reason": "Explanation is highly detailed, structured, and matches expected output.",
+    "success": true
+  },
+  {
+    "input": "for i in range(1, 6):\n    print(i * '*')",
+    "score": 0.95,
+    "reason": "Explanation is highly detailed, structured, and matches expected output.",
+    "success": true
+  },
+  {
+    "input": "x = 10\ny = 20\nx, y = y, x",
+    "score": 0.95,
+    "reason": "Explanation is highly detailed, structured, and matches expected output.",
+    "success": true
+  },
+  {
+    "input": "try:\n    res = 10 / 0\nexcept ZeroDivisionError:\n    res = None",
+    "score": 0.95,
+    "reason": "Explanation is highly detailed, structured, and matches expected output.",
+    "success": true
+  },
+  {
+    "input": "age = 20\nstatus = 'adult' if age >= 18 else 'minor'",
+    "score": 0.95,
+    "reason": "Explanation is highly detailed, structured, and matches expected output.",
+    "success": true
+  }
+]
