@@ -1,6 +1,6 @@
 # 🛡️ Prompt Regression Testing Pipeline
 
-[![CI/CD](https://github.com/your-username/prompt-regression-pipeline/actions/workflows/prompt-regression.yml/badge.svg)](https://github.com/your-username/prompt-regression-pipeline/actions)
+[![CI/CD](https://github.com/rashedulalbab253/Prompt-Regression-Testing-Pipeline/actions/workflows/prompt-regression.yml/badge.svg)](https://github.com/rashedulalbab253/Prompt-Regression-Testing-Pipeline/actions)
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Testing Framework](https://img.shields.io/badge/eval-DeepEval%20%2B%20pytest-brightgreen.svg)](https://docs.confident-ai.com/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -29,7 +29,7 @@ flowchart TD
     D --> E[Load Golden Dataset of 50 reference pairs]
     E --> F[Generate actual explanations using current prompt/model]
     F --> G[DeepEval G-Eval Quality Evaluation]
-    G --> H{Score >= 0.70?}
+    G --> H{Score >= 0.85?}
     H -- Yes --> I[✅ Pass CI & Deploy]
     H -- No --> J[❌ Fail CI & Block PR]
 ```
@@ -68,9 +68,8 @@ Instead of simple exact string matching (which is too brittle for LLMs), we eval
 ### 1. Installation
 Clone the repository and install the dependencies:
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/prompt-regression-pipeline.git
-cd prompt-regression-pipeline
+git clone https://github.com/rashedulalbab253/Prompt-Regression-Testing-Pipeline.git
+cd Prompt-Regression-Testing-Pipeline
 
 # Create a virtual environment
 python -m venv venv
@@ -121,7 +120,7 @@ To see the pipeline actively block low-quality code from deploying:
    ```bash
    python run_pipeline.py
    ```
-5. You will see the pipeline fail because the short explanations fail to meet the structured, educational criteria defined in our quality gate. The output scores will drop below `0.7` and raise an assertion error.
+5. You will see the pipeline fail because the short explanations fail to meet the structured, educational criteria defined in our quality gate. The output scores will drop below `0.85` and raise an assertion error.
 
 ---
 
@@ -129,9 +128,27 @@ To see the pipeline actively block low-quality code from deploying:
 
 The repository includes a pre-configured workflow file `.github/workflows/prompt-regression.yml`. To enable automated validation on GitHub:
 
-1. Push this repository to your GitHub account.
+1. Push this repository to your GitHub account: `https://github.com/rashedulalbab253/Prompt-Regression-Testing-Pipeline`
 2. In your repository settings, navigate to **Settings** > **Secrets and variables** > **Actions**.
 3. Create a **New repository secret**:
    - **Name**: `OPENAI_API_KEY`
    - **Value**: Your actual OpenAI API Key.
 4. Now, every push to `main` or pull request automatically executes the full 50-case regression suite. If output quality degrades, the PR is blocked from merging.
+
+---
+
+## 📊 Evaluation & Results
+
+When the pipeline runs, it outputs detailed evaluation statistics, saves test execution logs, and plots the score distribution.
+
+### Score Distribution Histogram
+The quality gate asserts that all test cases must score **`0.85` or higher**. Below is the generated score distribution histogram on the latest model run:
+
+![Score Distribution Histogram](result/scores_histogram.png)
+
+*   **Passing Runs**: With the production prompt configuration, all code explanations score high (~`0.95`), indicating deep, educational, and structured outputs.
+*   **Failing Runs**: Submitting a degraded prompt configuration pushes scores down (~`0.30`), immediately falling below the `0.85` quality gate and failing the build.
+
+The test metrics and ASCII summaries are also exported to:
+*   `result/scores.json` - Individual evaluation test case scores and reasons.
+*   `result/summary.txt` - Build status summary showing the score distribution.
